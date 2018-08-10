@@ -1,0 +1,15 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="mine">images/mine.png</file>
+    <file alias="1">images/1.png</file>
+    <file alias="2">images/2.png</file>
+    <file alias="3">images/3.png</file>
+    <file alias="4">images/4.png</file>
+    <file alias="5">images/5.png</file>
+    <file alias="6">images/6.png</file>
+    <file alias="7">images/7.png</file>
+    <file alias="8">images/8.png</file>
+    <file alias="question">images/question.png</file>
+    <file alias="flag">images/flag.png</file>
+  </qresource>
+</RCC>
