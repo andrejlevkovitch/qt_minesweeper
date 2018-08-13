@@ -5,13 +5,10 @@
 #include <QSize>
 #include <random>
 
-#include <QDebug>
-
-minesweeper::game::game(::QSize size, unsigned short mines_n, ::QObject *parent)
-    : ::QObject{parent},
-      field_(size.height(),
-             decltype(field_)::value_type(size.width(), Type::NONE)),
-      mines_n_{mines_n}, first_pos_{true} {}
+minesweeper::game::game(::QObject *parent)
+    : ::QObject{parent}, size_{9, 9}, mines_n_{10}, first_pos_{true} {
+  new_game();
+}
 
 void minesweeper::game::create_field(::QPoint beg_pos) {
 #ifdef __linux__
@@ -56,7 +53,7 @@ void minesweeper::game::send_all_field() const {
   for (int i = 0; i < field_.size(); ++i) {
     for (int j = 0; j < field_[i].size(); ++j) {
       if (field_[i][j] != OPEN) {
-        emit send_pos_value(::QPoint{j, i}, field_[i][j]);
+        emit pos_value_signal(::QPoint{j, i}, field_[i][j]);
       }
     }
   }
@@ -66,7 +63,7 @@ void minesweeper::game::handle(::QPoint pos) {
   if (first_pos_) {
     first_pos_ = false;
     create_field(pos);
-    emit send_not_protect_capacity(mines_.size());
+    emit not_protect_capacity_signal(mines_.size());
   }
   int y = pos.y();
   int x = pos.x();
@@ -74,7 +71,7 @@ void minesweeper::game::handle(::QPoint pos) {
   if (value == OPEN) {
     return;
   }
-  send_pos_value(pos, value);
+  pos_value_signal(pos, value);
   field_[y][x] = OPEN;
   if (value == NONE) {
     for (int i = -1; i < 2; ++i) {
@@ -87,7 +84,7 @@ void minesweeper::game::handle(::QPoint pos) {
     }
   } else if (value == MINE) {
     send_all_field();
-    emit send_lose_signal();
+    emit lose_signal();
   }
 }
 
@@ -100,12 +97,29 @@ void minesweeper::game::re_protect(::QPoint pos) {
   if (protected_.size() == mines_.size()) {
     compar_mines_protect();
   }
-  emit send_not_protect_capacity(mines_.size() - protected_.size());
+  emit not_protect_capacity_signal(mines_.size() - protected_.size());
+}
+
+void minesweeper::game::new_game() {
+  first_pos_ = true;
+  field_ = decltype(field_)(
+      size_.height(), decltype(field_)::value_type(size_.width(), Type::NONE));
+  protected_.clear();
+  mines_.clear();
 }
 
 void minesweeper::game::compar_mines_protect() const {
   if (protected_ == mines_) {
     send_all_field();
-    emit send_end_game();
+    emit end_game_signal();
   }
+}
+
+int minesweeper::game::height() const { return size_.height(); }
+
+int minesweeper::game::width() const { return size_.width(); }
+
+void minesweeper::game::set_complexity(::QSize size, unsigned short mines_n) {
+  size_ = size;
+  mines_n_ = mines_n;
 }

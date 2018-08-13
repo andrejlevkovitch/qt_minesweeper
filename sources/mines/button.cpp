@@ -9,12 +9,12 @@
 }
 
 minesweeper::button::button(::QPoint pos, ::QWidget *parent)
-    : ::QPushButton{parent}, pos_{pos}, protected_{false}, disabled_{false} {
+    : ::QPushButton{parent}, pos_{pos}, status_{ENABLED} {
   setSizePolicy(::QSizePolicy::Policy::Minimum, ::QSizePolicy::Policy::Minimum);
   setCheckable(true);
 
   connect(this, &::QPushButton::released, this, [=]() {
-    if (!protected_ && !disabled_) {
+    if (!status_) {
       emit pushed(pos_);
     } else {
       setChecked(false);
@@ -61,7 +61,7 @@ void minesweeper::button::set_value(::QPoint pos, Type type) {
       break;
     };
 
-    disabled_ = true;
+    status_ = DISABLED;
     setIconSize(size());
     setIcon(pixmap_);
     if (!isChecked()) {
@@ -76,15 +76,19 @@ void minesweeper::button::resizeEvent(::QResizeEvent *event) {
 }
 
 void minesweeper::button::mouseReleaseEvent(::QMouseEvent *event) {
-  if (event->button() == Qt::MouseButton::RightButton && !disabled_) {
-    if (protected_) {
-      protected_ = false;
-      setIcon(::QPixmap{});
-      emit restore(pos_);
-    } else {
-      protected_ = true;
+  if (event->button() == Qt::MouseButton::RightButton && status_ != DISABLED) {
+    if (status_ == ENABLED) {
+      status_ = PROTECTED;
       setIconSize(sizeHint());
       setIcon(::QPixmap{":/flag"});
+      emit restore(pos_);
+    } else if (status_ == PROTECTED) {
+      status_ = QUESTION;
+      setIconSize(sizeHint());
+      setIcon(::QPixmap{":/question"});
+    } else if (status_ == QUESTION) {
+      status_ = ENABLED;
+      setIcon(::QPixmap{});
       emit restore(pos_);
     }
   }
