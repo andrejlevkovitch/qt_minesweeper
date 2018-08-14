@@ -11,5 +11,6 @@
     <file alias="8">images/8.png</file>
     <file alias="question">images/question.png</file>
     <file alias="flag">images/flag.png</file>
+    <file alias="m_style">styles/minesweeper_style.qss</file>
   </qresource>
 </RCC>

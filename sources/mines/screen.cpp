@@ -122,6 +122,6 @@ minesweeper::screen::create_game_field(minesweeper::game *game) const {
     }
   }
   field->setLayout(field_layout);
-  field->setStyleSheet("background-color : rgba(250, 250, 250, 250)");
+//field->setStyleSheet("background-color : rgba(250, 250, 250, 250)");
   return field;
 }

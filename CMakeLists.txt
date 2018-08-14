@@ -37,9 +37,9 @@ include_directories("./include")
 set(MAIN_SRC sources/main.cpp)
 set(MINES_LIB "mines")
 file(GLOB MINES_SRC "sources/mines/*.cpp" "include/*.hpp")
-set(IMAGES_SRC "images.qrc")
+set(QSOURCE_SRC "source.qrc")
 
-add_executable(${PROJECT_NAME} ${MAIN_SRC} ${IMAGES_SRC})
+add_executable(${PROJECT_NAME} ${MAIN_SRC} ${QSOURCE_SRC})
 add_library(${MINES_LIB} SHARED ${MINES_SRC})
 
 target_link_libraries(${PROJECT_NAME} ${MINES_LIB} Qt5::Widgets)

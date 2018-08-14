@@ -1,0 +1,21 @@
+minesweeper--screen {
+  background-color : rgba(250, 250, 250, 250);
+}
+
+minesweeper--button {
+  color : white;
+  background-color : white;
+  border : 1px solid darkgray;
+}
+
+minesweeper--button:pressed, minesweeper--button:checked {
+  background-color : lightgray;
+}
+
+minesweeper--button:!checked:!pressed:hover {
+  background-color : rgb(245, 245, 245);
+}
+
+minesweeper--button:pressed:hover {
+  background-color : darkgray;
+}
