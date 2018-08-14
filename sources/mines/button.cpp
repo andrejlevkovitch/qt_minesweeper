@@ -14,10 +14,12 @@ minesweeper::button::button(::QPoint pos, ::QWidget *parent)
   setCheckable(true);
 
   connect(this, &::QPushButton::released, this, [=]() {
-    if (!status_) {
+    if (status_ == ENABLED) {
       emit pushed(pos_);
-    } else {
+    } else if (status_ == PROTECTED) {
       setChecked(false);
+    } else if (status_ == DISABLED) {
+      setChecked(true);
     }
   });
 }
@@ -31,39 +33,47 @@ void minesweeper::button::set_value(::QPoint pos, Type type) {
       setDisabled(true);
       break;
     case ONE:
-      pixmap_ = ::QPixmap{":/1"};
+      setIcon(::QPixmap{":/1"});
       break;
     case TWO:
-      pixmap_ = ::QPixmap{":/2"};
+      setIcon(::QPixmap{":/2"});
       break;
     case THREE:
-      pixmap_ = ::QPixmap{":/3"};
+      setIcon(::QPixmap{":/3"});
       break;
     case FOUR:
-      pixmap_ = ::QPixmap{":/4"};
+      setIcon(::QPixmap{":/4"});
       break;
     case FIVE:
-      pixmap_ = ::QPixmap{":/5"};
+      setIcon(::QPixmap{":/5"});
       break;
     case SIX:
-      pixmap_ = ::QPixmap{":/6"};
+      setIcon(::QPixmap{":/6"});
       break;
     case SEVEN:
-      pixmap_ = ::QPixmap{":/7"};
+      setIcon(::QPixmap{":/7"});
       break;
     case EIGHT:
-      pixmap_ = ::QPixmap{":/8"};
+      setIcon(::QPixmap{":/8"});
       break;
     case MINE:
-      pixmap_ = ::QPixmap{":/mine"};
+      setIcon(::QPixmap{":/mine"});
+      if (status_ != PROTECTED) {
+        this->setStyleSheet("background-color : red");
+      } else {
+        this->setStyleSheet("background-color : green");
+      }
       break;
     default:
       break;
     };
 
+    if (type != MINE && status_ == PROTECTED) {
+      this->setStyleSheet("background-color : red");
+    }
+
     status_ = DISABLED;
     setIconSize(size());
-    setIcon(pixmap_);
     if (!isChecked()) {
       setChecked(true);
     }

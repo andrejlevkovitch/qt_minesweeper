@@ -5,9 +5,9 @@
 #include "type.hpp"
 #include <QObject>
 #include <QPoint>
+#include <QSize>
 #include <set>
 #include <vector>
-#include <QSize>
 
 class QMouseEvent;
 

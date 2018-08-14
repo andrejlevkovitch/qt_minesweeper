@@ -8,14 +8,14 @@
 namespace minesweeper {
 class button : public ::QPushButton {
   Q_OBJECT
-  public:
-    enum Status{ENABLED, DISABLED, PROTECTED, QUESTION};
+public:
+  enum Status { ENABLED, DISABLED, PROTECTED, QUESTION };
+
 public:
   static ::QSize MAX_SIZE();
 
 private:
   ::QPoint pos_;
-  ::QIcon pixmap_;
   Status status_;
 
 public:

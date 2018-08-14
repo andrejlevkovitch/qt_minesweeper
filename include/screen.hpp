@@ -5,7 +5,7 @@
 #include <QWidget>
 
 namespace minesweeper {
-  class game;
+class game;
 };
 
 namespace minesweeper {
