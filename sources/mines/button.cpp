@@ -13,10 +13,10 @@ minesweeper::button::button(::QPoint pos, ::QWidget *parent)
   setSizePolicy(::QSizePolicy::Policy::Minimum, ::QSizePolicy::Policy::Minimum);
   setCheckable(true);
 
-  connect(this, &::QPushButton::released, this, [=]() {
+  connect(this, &::QPushButton::clicked, this, [=]() {
     if (status_ == ENABLED) {
       emit pushed(pos_);
-    } else if (status_ == PROTECTED) {
+    } else if (status_ == PROTECTED || status_ == QUESTION) {
       setChecked(false);
     } else if (status_ == DISABLED) {
       setChecked(true);
@@ -58,8 +58,10 @@ void minesweeper::button::set_value(::QPoint pos, Type type) {
       break;
     case MINE:
       setIcon(::QPixmap{":/mine"});
-      if (status_ != PROTECTED) {
-        this->setStyleSheet("background-color : red");
+      if (status_ == ENABLED) {
+        if (isChecked()) {
+          this->setStyleSheet("background-color : red");
+        }
       } else {
         this->setStyleSheet("background-color : green");
       }
